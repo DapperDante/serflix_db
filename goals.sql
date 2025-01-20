@@ -7,5 +7,5 @@ VALUES('Fan', 'Add 5 favorite movies', 'https://serflix-bucket.s3.us-east-2.amaz
 ('Maniac', 'Add 1 favorite serie', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x1_serie.png'),
 ('Cinefilo', 'Add 5 favorite series', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x5_serie.png'),
 ('Full', 'Add 10 favorite series', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x10_serie.png'),
-('Respect', 'Add 15 favorite series', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x15_serie.png');
-('Master', 'Add 50 favorite movies', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x50.png')
+('Respect', 'Add 15 favorite series', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x15_serie.png'),
+('Master', 'Add 50 favorite movies', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x50.png');
