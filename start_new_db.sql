@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS score_series;
+DROP TABLE IF EXISTS score_movies;
+DROP TABLE IF EXISTS profile_series;
+DROP TABLE IF EXISTS profile_movies;
+DROP TABLE IF EXISTS profile_goals;
+DROP TABLE IF EXISTS log_views;
+DROP TABLE IF EXISTS log_passwords;
+DROP TABLE IF EXISTS goals;
+DROP TABLE IF EXISTS profiles;
+DROP TABLE IF EXISTS users;
+SOURCE ./structure.sql;
+SOURCE ./goals.sql;

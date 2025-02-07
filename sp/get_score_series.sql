@@ -1,5 +1,7 @@
-DELIMITER //
-CREATE PROCEDURE `get_score_series`(in in_profile_id int, in in_serie_id int)
+DROP PROCEDURE IF EXISTS get_score_series;
+
+delimiter //
+create procedure `get_score_series`(in in_profile_id int, in in_serie_id int)
 begin
 	declare flag int;
 	declare results JSON;
@@ -17,10 +19,10 @@ begin
 		where s_series.profile_id = in_profile_id and s_series.serie_id = in_serie_id
 	) into flag;
 	if flag then
-		SELECT s_series.id, s_series.score, s_series.review, avg_score, results as results
+		select json_object('id', s_series.id, 'score', s_series.score, 'review', s_series.review) as review, avg_score, results 
 		from score_series as s_series where s_series.profile_id = in_profile_id and s_series.serie_id = in_serie_id;
 	else
-		select null as id, null as score, null as review, avg_score, results;
+		select json_object('id', null, 'score', null, 'review', null) as review, avg_score, results;
 	end if;
 end //
-DELIMITER ;
+delimiter ;

@@ -1,0 +1,14 @@
+SOURCE ./sp/add_goal_movie_cnt.sql;
+SOURCE ./sp/add_goal_serie_cnt.sql;
+SOURCE ./sp/add_log_passwords.sql;
+SOURCE ./sp/add_log_views.sql;
+SOURCE ./sp/add_movie.sql;
+SOURCE ./sp/add_serie.sql;
+SOURCE ./sp/get_movie.sql;
+SOURCE ./sp/get_profile.sql;
+SOURCE ./sp/get_rec_by_profile.sql;
+SOURCE ./sp/get_rec.sql;
+SOURCE ./sp/get_score_movies.sql; 
+SOURCE ./sp/get_score_series.sql;
+SOURCE ./sp/get_serie.sql;
+SOURCE ./sp/update_password.sql;
