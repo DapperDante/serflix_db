@@ -1,12 +1,18 @@
+DROP PROCEDURE IF EXISTS add_goal_serie_cnt;
+
 DELIMITER //
-CREATE PROCEDURE `add_goal_serie_count`(in in_profile_id int, out out_goal_id int)
-BEGIN 
+CREATE PROCEDURE `add_goal_serie_cnt`(in in_profile_id int, out out_goal_id int)
+sp:begin
 	declare serie_count int;
 	declare flag int;
-	select count(*) into serie_count 
+
+	select count(*) into serie_count
 	from profile_series as p_series 
 	where p_series.profile_id = in_profile_id 
-	and p_series.is_delete = 0;
+	and p_series.delete_at is null;
+	if serie_count = 0 then
+		leave sp;
+	end if;
 	case
 		when serie_count >= 15 then
 			set out_goal_id = 8;
@@ -17,16 +23,18 @@ BEGIN
 		when serie_count >= 1 then
 			set out_goal_id = 5;
 	end case;
+	
 	select exists (
 		select p_goal.id from profile_goals as p_goal 
 		where p_goal.profile_id = in_profile_id 
 		and p_goal.goal_id = out_goal_id
 	) into flag;
+	
 	if flag then
 		SET out_goal_id = null;
 	else
 		insert into profile_goals(profile_id, goal_id)
 		values(in_profile_id, out_goal_id);
 	end if;
-END //
-DELIMITER ;
+end //
+DELIMITER ; 
