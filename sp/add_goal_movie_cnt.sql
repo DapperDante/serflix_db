@@ -1,42 +1,41 @@
 DROP PROCEDURE IF EXISTS add_goal_movie_cnt;
 
 DELIMITER //
-CREATE procedure `add_goal_movie_cnt`(in in_profile_id int, out out_goal_id int)
-sp:begin
-	declare movie_count int;
-	declare flag int;
+CREATE PROCEDURE `add_goal_movie_cnt`(IN in_profile_id INT, OUT out_goal_id INT)
+BEGIN
+	DECLARE movie_count INT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		SET out_goal_id = NULL;
+		ROLLBACK;
+	END;
 
-	select count(*) into movie_count
-	from profile_movies as p_movies 
-	where p_movies.profile_id = in_profile_id 
-	and p_movies.delete_at is null;
-	if movie_count = 0 then
-		leave sp;
-	end if;
-	case
-		when movie_count >= 50 then
-			set out_goal_id= 9;
-		when movie_count >= 20 then
-			set out_goal_id = 3;
-		when movie_count >= 10 then
-			set out_goal_id = 2;
-		when movie_count >= 5 then
-			set out_goal_id = 1;
-		when movie_count >= 1 then
-			set out_goal_id = 4;
-	end case;
+	START TRANSACTION;
+
+	SELECT count(*) INTO movie_count
+	FROM profile_movies AS p_movies 
+	WHERE p_movies.profile_id = in_profile_id 
+	AND p_movies.delete_at IS NULL;
+
+	CASE
+		WHEN movie_count >= 50 THEN
+			SET out_goal_id= 9;
+		WHEN movie_count >= 20 THEN
+			SET out_goal_id = 3;
+		WHEN movie_count >= 10 THEN
+			SET out_goal_id = 2;
+		WHEN movie_count >= 5 THEN
+			SET out_goal_id = 1;
+		WHEN movie_count >= 1 THEN
+			SET out_goal_id = 4;
+	END CASE;
+
+	-- TODO check if the goal already exists before insert a new goal
+
+	INSERT INTO profile_goals(profile_id, goal_id)
+	VALUES(in_profile_id, out_goal_id);
 	
-	select exists (
-		select p_goal.id from profile_goals as p_goal 
-		where p_goal.profile_id = in_profile_id 
-		and p_goal.goal_id = out_goal_id
-	) into flag;
-	
-	if flag then
-		set out_goal_id = null;
-	else
-		insert into profile_goals(profile_id, goal_id)
-		values(in_profile_id, out_goal_id);
-	end if;
-end //
+	COMMIT;
+END //
 DELIMITER ;

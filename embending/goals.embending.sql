@@ -1,4 +1,5 @@
 INSERT INTO goals
+
 (name, detail, url)
 VALUES('Fan', 'Add 5 favorite movies', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x5.png'),
 ('Crazy fan', 'Add 10 favorite movies', 'https://serflix-bucket.s3.us-east-2.amazonaws.com/goals/goal_favorite_x10.png'),

@@ -1,9 +1,27 @@
+CREATE TABLE IF NOT EXISTS plans(
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(20) NOT NULL,
+    detail VARCHAR(100) NOT NULL,
+    price_usd DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY(id)
+);
+CREATE TABLE IF NOT EXISTS suscriptions(
+    id INT NOT NULL AUTO_INCREMENT,
+    plan_id INT NOT NULL,
+    user_id INT NOT NULL UNIQUE,
+    PRIMARY KEY(id),
+    FOREIGN KEY(plan_id) REFERENCES plans(id),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
 CREATE TABLE IF NOT EXISTS users(
 	id INT NOT NULL AUTO_INCREMENT,
     email VARCHAR(70) NOT NULL UNIQUE,
     username VARCHAR(65) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    PRIMARY KEY(id)
+    auth_status TIMESTAMP,
+    inactive TIMESTAMP,
+    PRIMARY KEY(id),
+    FOREIGN KEY(user_type_id) REFERENCES user_type(id)
 );
 CREATE TABLE IF NOT EXISTS profiles(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -81,9 +99,3 @@ CREATE TABLE IF NOT EXISTS score_series(
     PRIMARY KEY(id),
     FOREIGN KEY(profile_id) REFERENCES profiles(id)
 );
-CREATE INDEX idx_unique_item ON log_views(profile_id, item_id, type);
-CREATE INDEX idx_unique_item ON profile_movies(profile_id, movie_id);
-CREATE INDEX idx_unique_item ON profile_series(profile_id, serie_id);
-CREATE INDEX idx_unique_item ON score_series(profile_id, serie_id);
-CREATE INDEX idx_unique_item ON score_movies(profile_id, movie_id);
-CREATE INDEX idx_unique_item ON profile_goals(profile_id, goal_id);

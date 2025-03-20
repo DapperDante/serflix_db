@@ -1,36 +1,53 @@
 DROP PROCEDURE IF EXISTS add_movie;
 
 delimiter //
-create procedure `add_movie`(in in_profile_id int, in in_movie_id int)
+CREATE PROCEDURE `add_movie`(IN in_profile_id INT, IN in_movie_id INT)
 BEGIN 
-	declare goal_id_got int;
-	declare count_movie int;
-	declare tupla_id_movie_found int;
+	DECLARE goal_id_got int;
+	DECLARE id_movie_found int;
+	DECLARE message VARCHAR(255);
+	DECLARE error_code INT;
+	DECLARE result_json JSON;
 
-	-- First, It add or update the new movie
-	select p_movies.id into tupla_id_movie_found 
-	from profile_movies  as p_movies 
-	where p_movies.profile_id = in_profile_id 
-	and p_movies.movie_id = in_movie_id;
+	-- First, verify if the profile's movie exists and evaluate if add or update
+	SELECT p_movies.id INTO id_movie_found 
+	FROM profile_movies  AS p_movies 
+	WHERE p_movies.profile_id = in_profile_id 
+	AND p_movies.movie_id = in_movie_id;
 
-	if tupla_id_movie_found then 
-		update profile_movies as p_movies
-		set p_movies.delete_at = null
-		where p_movies.id = tupla_id_movie_found;
-	else
-		insert into profile_movies(profile_id, movie_id)
-		values (in_profile_id, in_movie_id);
-		set tupla_id_movie_found = LAST_INSERT_ID();
-	end if;
+	IF id_movie_found THEN 
+		UPDATE profile_movies AS p_movies
+		SET p_movies.delete_at = NULL
+		WHERE p_movies.id = id_movie_found;
+	ELSE
+		INSERT INTO profile_movies(profile_id, movie_id)
+		VALUE (in_profile_id, in_movie_id);
+		-- get the tupla's id of the movie if it's new profile's movie
+		SET id_movie_found = LAST_INSERT_ID();
+	END IF;
 	
-	-- after, verify if got a goal
-	call add_goal_movie_cnt(in_profile_id, goal_id_got);
-	
-	if goal_id_got is not null then
-		select tupla_id_movie_found as id, JSON_OBJECT('id', id, 'name', name, 'detail', detail, 'url', url) as goal
-		FROM goals where id = goal_id_got;
-	ELSE 
-		SELECT tupla_id_movie_found AS id, null goal;
-	end IF;
+	-- after, verify if got a goal through number of movies added
+	CALL add_goal_movie_cnt(in_profile_id, goal_id_got);
+
+	SET message = 'Movie added';
+	SET result_json = JSON_OBJECT(
+		'id', id_movie_found,
+		'goal', (
+			SELECT JSON_OBJECT(
+				'id', id, 
+				'name', name, 
+				'detail', detail, 
+				'url', url
+			) 
+			FROM goals 
+			WHERE id = goal_id_got
+		)
+	);
+
+	SELECT JSON_OBJECT(
+		'message', message,
+		'result', result_json,
+		'error_code', error_code
+	) AS response;
 END //
-delimiter ;
+DELIMITER ;
