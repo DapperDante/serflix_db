@@ -9,6 +9,12 @@ BEGIN
 	DECLARE error_code INT;
 	DECLARE result_json JSON;
 
+	DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+	BEGIN
+		SET error_code = 45000;
+		SET message = 'Error adding movie';
+	END;
+
 	-- First, verify if the profile's movie exists and evaluate if add or update
 	SELECT p_movies.id INTO id_movie_found 
 	FROM profile_movies  AS p_movies 

@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS get_serie;
 DELIMITER //
 CREATE PROCEDURE `get_serie`(IN in_profile_id INT, IN in_serie_id INT)
 BEGIN
-	DECLARE message VARCHAR(255);
+	DECLARE message VARCHAR(255) DEFAULT 'Serie found';
 	DECLARE error_code INT;
 	DECLARE result_json JSON;
 
@@ -14,7 +14,7 @@ BEGIN
 		SET result_json = NULL;
 		ROLLBACK;
 	END;
-	SET message = 'Serie found';
+	
 	START TRANSACTION;
 
 	CALL add_log_views(in_profile_id, in_serie_id, 'S');

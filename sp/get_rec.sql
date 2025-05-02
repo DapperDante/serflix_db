@@ -8,6 +8,12 @@ BEGIN
 	DECLARE message VARCHAR(255) DEFAULT 'Top 5 views';
 	DECLARE number_of_views INT DEFAULT 5;
 
+	DECLARE CONTINUE HANDLER FOR NOT FOUND
+	BEGIN
+		SET error_code = 1329;
+		SET message = 'No data found';
+	END; 
+	
 	SELECT 
 		JSON_ARRAYAGG(
 			JSON_OBJECT(

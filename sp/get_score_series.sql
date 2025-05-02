@@ -1,7 +1,7 @@
-DROP PROCEDURE IF EXISTS get_score_series;
+DROP PROCEDURE IF EXISTS get_score_serie;
 
 DELIMITER //
-CREATE PROCEDURE `get_score_series`(IN in_profile_id INT, IN in_serie_id INT)
+CREATE PROCEDURE `get_score_serie`(IN in_profile_id INT, IN in_serie_id INT)
 BEGIN
 	DECLARE result_json JSON;
 	DECLARE avg_score INT;

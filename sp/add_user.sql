@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS add_user;
 DELIMITER //
 CREATE PROCEDURE add_user(in in_username VARCHAR(70), in in_email VARCHAR(65), in in_password VARCHAR(100))
 BEGIN
-  DECLARE message VARCHAR(255);
+  DECLARE message VARCHAR(255) DEFAULT 'User added';
   DECLARE error_code INT;
   DECLARE result_json JSON;
 
@@ -15,9 +15,6 @@ BEGIN
     SET result_json = NULL;
     ROLLBACK;
   END;
-
-  SET message = 'User added';
-  SET error_code = NULL;
 
   START TRANSACTION;
 

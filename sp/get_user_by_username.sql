@@ -1,7 +1,7 @@
-DROP PROCEDURE IF EXISTS get_user;
+DROP PROCEDURE IF EXISTS get_user_by_username;
 
 DELIMITER //
-CREATE PROCEDURE get_user(IN in_username VARCHAR(65))
+CREATE PROCEDURE get_user_by_username(IN in_username VARCHAR(65))
 BEGIN
   DECLARE result_json JSON;
   DECLARE error_code INT; 
@@ -20,15 +20,16 @@ BEGIN
     SET message = 'User not authenticated yet';
   END;
 
-
   SELECT 
     JSON_OBJECT(
       'id', id,
       'email', email,
       'username', username,
-      'password', password
+      'password', password,
+      'is_first_time', is_first_time,
+      'auth', auth_status
     ),
-    auth_status 
+    auth_status
   INTO result_json, auth_status_find
   FROM users 
   WHERE username = in_username; 

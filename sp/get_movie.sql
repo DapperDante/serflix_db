@@ -3,7 +3,7 @@ DROP PROCEDURE IF EXISTS get_movie;
 DELIMITER //
 CREATE PROCEDURE `get_movie`(IN in_profile_id INT, IN in_movie_id INT)
 BEGIN
-	DECLARE message VARCHAR(255);
+	DECLARE message VARCHAR(255) DEFAULT 'Movie found';
 	DECLARE error_code INT;
 	DECLARE result_json JSON;
 
@@ -14,11 +14,9 @@ BEGIN
 		SET result_json = NULL;
 		ROLLBACK;
 	END;
-	SET message = 'Movie found';
+	
 	START TRANSACTION;
 
-	CALL add_log_views(in_profile_id, in_movie_id, 'M');
-	
 	SELECT JSON_OBJECT(
 		'id', id,
 		'profile_id', profile_id,
@@ -30,6 +28,8 @@ BEGIN
 	AND delete_at IS NULL;
 	
 	COMMIT;
+
+	CALL add_log_views(in_profile_id, in_movie_id, 'M');
 	
 	SELECT JSON_OBJECT(
 		'message', message,

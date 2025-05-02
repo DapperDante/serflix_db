@@ -1,7 +1,7 @@
-DROP PROCEDURE IF EXISTS get_score_movies;
+DROP PROCEDURE IF EXISTS get_score_movie;
 
 DELIMITER //
-CREATE PROCEDURE `get_score_movies`(IN in_profile_id INT, IN in_movie_id INT)
+CREATE PROCEDURE `get_score_movie`(IN in_profile_id INT, IN in_movie_id INT, IN in_time_zone VARCHAR(70))
 BEGIN
 	DECLARE scores_json JSON;
 	DECLARE its_score JSON;
@@ -17,12 +17,15 @@ BEGIN
 
 	SELECT 
 		JSON_OBJECT(
-			'id', id,
+			'id', s_movies.id,
+			'name', name,
 			'score', score,
-			'review', review
+			'review', review,
+			'created_at', DATE(CONVERT_TZ(created_at, '+00:00', in_time_zone))
 		)
 	INTO its_score
 	FROM score_movies AS s_movies
+	RIGHT JOIN profiles ON profiles.id = s_movies.profile_id
 	WHERE s_movies.profile_id = in_profile_id
 	AND s_movies.movie_id = in_movie_id;
 
@@ -31,7 +34,8 @@ BEGIN
 			JSON_OBJECT(
 					'score', s_movies.score, 
 					'review', s_movies.review, 
-					'name', profiles.name
+					'name', profiles.name,
+					'created_at', DATE(CONVERT_TZ(s_movies.created_at, '+00:00', in_time_zone))
 			)
 		)
 	INTO scores_json

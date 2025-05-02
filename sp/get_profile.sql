@@ -7,10 +7,12 @@ BEGIN
 	DECLARE series_json JSON;
 	DECLARE goals_json JSON;
 	DECLARE plan_json JSON;
+	DECLARE is_password BOOLEAN;
 	DECLARE error_code INT;
 	DECLARE message VARCHAR(255) DEFAULT 'Profile found';
 	-- this will be the final result
 	DECLARE result_json JSON;
+	
 	SELECT 
 		JSON_ARRAYAGG(
 			JSON_OBJECT(
@@ -67,6 +69,15 @@ BEGIN
 	);
 
 	SELECT 
+		IFNULL(
+			(
+				SELECT TRUE FROM profile_password
+				WHERE profile_id = in_profile_id
+			),
+			FALSE
+		) INTO is_password;
+	
+	SELECT 
 		JSON_OBJECT(
 			'id', id,
 			'name', name,
@@ -74,7 +85,8 @@ BEGIN
 			'movies', movies_json,
 			'series', series_json,
 			'goals', goals_json,
-			'plan', plan_json
+			'plan', plan_json,
+			'password', is_password
 		)
 	INTO result_json
 	FROM profiles

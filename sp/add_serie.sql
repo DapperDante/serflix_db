@@ -16,7 +16,7 @@ BEGIN
 	WHERE p_series.profile_id = in_profile_id 
 	AND p_series.serie_id = in_serie_id;
 	
-	IF tupla_id_serie_found THEN
+	IF id_serie_found THEN
 		UPDATE profile_series AS p_series
 		SET p_series.delete_at = NULL
 		WHERE p_series.id = id_serie_found;
