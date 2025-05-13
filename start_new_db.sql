@@ -8,5 +8,8 @@ DROP TABLE IF EXISTS log_passwords;
 DROP TABLE IF EXISTS goals;
 DROP TABLE IF EXISTS profiles;
 DROP TABLE IF EXISTS users;
-SOURCE ./structure.sql;
-SOURCE ./goals.sql;
+
+SOURCE ./structure/./tables.structure.sql;
+SOURCE ./structure/./index.structure.sql;
+SOURCE ./embending_data.sql;
+SOURCE ./update_all_sp.sql;

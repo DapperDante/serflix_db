@@ -1,28 +1,55 @@
-DROP PROCEDURE IF EXISTS get_score_series;
+DROP PROCEDURE IF EXISTS get_score_serie;
 
-delimiter //
-create procedure `get_score_series`(in in_profile_id int, in in_serie_id int)
-begin
-	declare flag int;
-	declare results JSON;
-	declare avg_score int;
-	select AVG(s_series.score) into avg_score from score_series as s_series where s_series.serie_id = in_serie_id;
-	-- first get all scores for show in final
-	select json_arrayagg(json_object('score', s_series.score, 'review', s_series.review, 'name', profiles.name))
-	into results
-	from score_series as s_series 
-	join profiles on profiles.id = s_series.profile_id
-	and s_series.serie_id = in_serie_id;
-	-- verify if this profile has a review of this movie
-	select exists(
-		select s_series.id from score_series as s_series 
-		where s_series.profile_id = in_profile_id and s_series.serie_id = in_serie_id
-	) into flag;
-	if flag then
-		select json_object('id', s_series.id, 'score', s_series.score, 'review', s_series.review) as review, avg_score, results 
-		from score_series as s_series where s_series.profile_id = in_profile_id and s_series.serie_id = in_serie_id;
-	else
-		select json_object('id', null, 'score', null, 'review', null) as review, avg_score, results;
-	end if;
-end //
-delimiter ;
+DELIMITER //
+CREATE PROCEDURE `get_score_serie`(IN in_profile_id INT, IN in_serie_id INT)
+BEGIN
+	DECLARE result_json JSON;
+	DECLARE avg_score INT;
+	DECLARE score_json JSON;
+	DECLARE its_score JSON;
+	DECLARE message VARCHAR(255) DEFAULT 'Score series retrieved';
+	DECLARE error_code INT;
+
+	SELECT AVG(s_series.score) 
+	INTO avg_score 
+	FROM score_series AS s_series 
+	WHERE s_series.serie_id = in_serie_id;
+	
+	SELECT 
+		JSON_OBJECT(
+			'id', id,
+			'score', score,
+			'review', review
+	)
+	INTO its_score
+	FROM score_series AS s_series
+	WHERE s_series.profile_id = in_profile_id
+	AND s_series.serie_id = in_serie_id;
+
+	SELECT 
+		JSON_ARRAYAGG(
+			JSON_OBJECT(
+					'score', s_series.score, 
+					'review', s_series.review, 
+					'name', profiles.name
+			)
+		)
+	INTO score_json
+	FROM score_series AS s_series
+	JOIN profiles ON profiles.id = s_series.profile_id
+	AND s_series.serie_id = in_serie_id
+	AND s_series.profile_id != in_profile_id;
+
+	SELECT JSON_OBJECT(
+		'avg_score', avg_score,
+		'scores', score_json,
+		'its_score', its_score
+	) INTO result_json;
+
+	SELECT JSON_OBJECT(
+		'message', message, 
+		'result', result_json,
+		'error_code', error_code
+	) AS response;
+END //
+DELIMITER ;

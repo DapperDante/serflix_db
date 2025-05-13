@@ -1,28 +1,59 @@
-DROP PROCEDURE IF EXISTS get_score_movies;
+DROP PROCEDURE IF EXISTS get_score_movie;
 
-delimiter //
-create procedure `get_score_movies`(in in_profile_id int, in in_movie_id int)
-begin
-	declare flag int;
-	declare results JSON;
-	declare avg_score int;
-	select AVG(s_movies.score) into avg_score from score_movies as s_movies where s_movies.movie_id = in_movie_id;
-	-- first get all scores for show in final
-	select json_arrayagg(json_object('score', s_movies.score, 'review', s_movies.review, 'name', profiles.name))
-	into results
-	from score_movies as s_movies 
-	join profiles on profiles.id = s_movies.profile_id
-	and s_movies.movie_id = in_movie_id;
-	-- verify if this profile has a review of this movie
-	select exists(
-		select s_movies.id from score_movies as s_movies 
-		where s_movies.profile_id = in_profile_id and s_movies.movie_id = in_movie_id
-	) into flag;
-	if flag then
-		select json_object('id', s_movies.id, 'score', s_movies.score, 'review', s_movies.review) as review, avg_score, results 
-		from score_movies as s_movies where s_movies.profile_id = in_profile_id and s_movies.movie_id = in_movie_id;
-	else
-		select json_object('id', null, 'score', null, 'review', null) as review, avg_score, results;
-	end if;
-end //
-delimiter ;
+DELIMITER //
+CREATE PROCEDURE `get_score_movie`(IN in_profile_id INT, IN in_movie_id INT, IN in_time_zone VARCHAR(70))
+BEGIN
+	DECLARE scores_json JSON;
+	DECLARE its_score JSON;
+	DECLARE avg_score INT;
+	DECLARE result_json JSON;
+	DECLARE message VARCHAR(255) DEFAULT 'Score movies retrieved';
+	DECLARE error_code INT;
+
+	SELECT AVG(s_movies.score) 
+	INTO avg_score 
+	FROM score_movies AS s_movies 
+	WHERE s_movies.movie_id = in_movie_id;
+
+	SELECT 
+		JSON_OBJECT(
+			'id', s_movies.id,
+			'name', name,
+			'score', score,
+			'review', review,
+			'created_at', DATE(CONVERT_TZ(created_at, '+00:00', in_time_zone))
+		)
+	INTO its_score
+	FROM score_movies AS s_movies
+	RIGHT JOIN profiles ON profiles.id = s_movies.profile_id
+	WHERE s_movies.profile_id = in_profile_id
+	AND s_movies.movie_id = in_movie_id;
+
+	SELECT 
+		JSON_ARRAYAGG(
+			JSON_OBJECT(
+					'score', s_movies.score, 
+					'review', s_movies.review, 
+					'name', profiles.name,
+					'created_at', DATE(CONVERT_TZ(s_movies.created_at, '+00:00', in_time_zone))
+			)
+		)
+	INTO scores_json
+	FROM score_movies AS s_movies 
+	JOIN profiles ON profiles.id = s_movies.profile_id
+	AND s_movies.movie_id = in_movie_id
+	AND s_movies.profile_id != in_profile_id; -- exclude the current profile's score of this movie
+
+	SELECT JSON_OBJECT(
+		'avg_score', avg_score,
+		'scores', scores_json,
+		'its_score', its_score
+	) INTO result_json;
+
+	SELECT JSON_OBJECT(
+		'message', message, 
+		'result', result_json,
+		'error_code', error_code
+	) AS response;
+END //
+DELIMITER ;

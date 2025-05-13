@@ -1,0 +1,6 @@
+// directories to help to your workspace but not to commit by git
+./db_updates./*
+./db_backups./*
+
+.env
+.vscode
