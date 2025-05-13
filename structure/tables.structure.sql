@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users(
     password VARCHAR(100) NOT NULL,
     auth_status TIMESTAMP,
     inactive TIMESTAMP,
-    is_first_time TIMESTAMP,
+    is_first_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );
 CREATE TABLE IF NOT EXISTS plans(

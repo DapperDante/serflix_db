@@ -33,3 +33,4 @@ One each of those variables is essential to function correctly becase some scrip
 - DB_PASSWORD
 - DB_NAME
 - FILE_TO_APPLY_BACKUP
+- FILE_SQL_TO_APPLY
