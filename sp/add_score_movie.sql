@@ -15,8 +15,8 @@ BEGIN
   
   START TRANSACTION;
 
-  INSERT INTO score_movies(profile_id, movie_id, score, review, created_at)
-  VALUES (in_profile_id, in_movie_id, in_score, in_review, UTC_TIMESTAMP());
+  INSERT INTO score_movies(profile_id, movie_id, score, review)
+  VALUES (in_profile_id, in_movie_id, in_score, in_review);
 
   COMMIT;
   
@@ -24,6 +24,6 @@ BEGIN
     'result', result_json,
     'message', message,
     'error_code', error_code
-  ) AS result;
+  ) AS response;
 END //
 DELIMITER ;

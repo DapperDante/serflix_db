@@ -18,7 +18,8 @@ BEGIN
 
   START TRANSACTION;
 
-  INSERT INTO users(email, username, password) VALUES(in_email, in_username, in_password);
+  INSERT INTO users(email, username, password) 
+  VALUES(in_email, in_username, in_password);
   IF error_code IS NULL THEN 
     SET result_json = JSON_OBJECT(
       'id', LAST_INSERT_ID()

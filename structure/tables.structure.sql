@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS score_movies(
     movie_id INT NOT NULL,
     score TINYINT NOT NULL,
     review VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
     FOREIGN KEY(profile_id) REFERENCES profiles(id),
     CONSTRAINT unique_value UNIQUE(profile_id, movie_id)
@@ -114,7 +114,7 @@ CREATE TABLE IF NOT EXISTS score_series(
     serie_id INT NOT NULL,
     score TINYINT NOT NULL,
     review VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
     FOREIGN KEY(profile_id) REFERENCES profiles(id),
     CONSTRAINT unique_value UNIQUE(profile_id, serie_id)
