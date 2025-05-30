@@ -14,6 +14,7 @@ SOURCE ./sp/change_to_free.sql;
 SOURCE ./sp/change_to_premium.sql;
 SOURCE ./sp/delete_movie.sql;
 SOURCE ./sp/delete_profile_password.sql;
+SOURCE ./sp/delete_profile.sql;
 SOURCE ./sp/delete_serie.sql;
 SOURCE ./sp/get_all_movies.sql;
 SOURCE ./sp/get_all_profiles.sql;

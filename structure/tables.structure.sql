@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS profile_password(
     profile_id INT NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(profile_id) REFERENCES profiles(id) 
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS goals(
 	id INT NOT NULL AUTO_INCREMENT,
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS log_views(
 	type CHAR,
 	timestamp DATETIME NOT NULL,
 	PRIMARY KEY(id),
-    FOREIGN KEY(profile_id) REFERENCES profiles(id),
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
 	CHECK(TYPE IN ('M', 'S'))
 );
 CREATE TABLE IF NOT EXISTS profile_goals(
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS profile_goals(
     profile_id INT NOT NULL,
     goal_id INT NOT NULL,
     PRIMARY KEY(id),
-    FOREIGN KEY(profile_id) REFERENCES profiles(id),
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     FOREIGN KEY(goal_id) REFERENCES goals(id),
     CONSTRAINT unique_value UNIQUE(profile_id, goal_id)
 );
@@ -85,7 +85,7 @@ CREATE TABLE IF NOT EXISTS profile_movies(
     movie_id INT NOT NULL,
     delete_at TIMESTAMP,
     PRIMARY KEY(id),
-	FOREIGN KEY(profile_id) REFERENCES profiles(id),
+	FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     CONSTRAINT unique_value UNIQUE(profile_id, movie_id)
 );
 CREATE TABLE IF NOT EXISTS score_movies(
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS score_movies(
     review VARCHAR(100) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
-    FOREIGN KEY(profile_id) REFERENCES profiles(id),
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     CONSTRAINT unique_value UNIQUE(profile_id, movie_id)
 );
 CREATE TABLE IF NOT EXISTS profile_series(
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS profile_series(
     serie_id INT NOT NULL,
     delete_at TIMESTAMP,
     PRIMARY KEY(id),
-    FOREIGN KEY(profile_id) REFERENCES profiles(id),
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     CONSTRAINT unique_value UNIQUE(profile_id, serie_id)
 );
 CREATE TABLE IF NOT EXISTS score_series(
@@ -116,6 +116,6 @@ CREATE TABLE IF NOT EXISTS score_series(
     review VARCHAR(100) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id),
-    FOREIGN KEY(profile_id) REFERENCES profiles(id),
+    FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     CONSTRAINT unique_value UNIQUE(profile_id, serie_id)
 );
