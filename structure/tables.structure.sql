@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS users(
     email VARCHAR(70) NOT NULL UNIQUE,
     username VARCHAR(65) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
-    auth_status TIMESTAMP,
-    inactive TIMESTAMP,
+    auth_status DATETIME DEFAULT NULL,
+    inactive DATETIME DEFAULT NULL,
     is_first_time DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY(id)
 );

@@ -20,7 +20,7 @@ BEGIN
     END;
 
     UPDATE users
-    SET is_first_time = 0
+    SET is_first_time = NULL
     WHERE id = user_id;
 
     SELECT JSON_OBJECT(

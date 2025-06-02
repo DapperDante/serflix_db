@@ -1,0 +1,19 @@
+{
+  "name": "serflix_db",
+  "version": "1.0.0",
+  "description": "It just managment about database for serflix, there are storage procedures and scripts to make structure or certain data that need it, the sp is based on Mysql, but if you want to use on Sql server or other RDBMS you change code's line for it to work",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-mysql": "^2.0.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "mysql2": "^3.14.1"
+  }
+}
