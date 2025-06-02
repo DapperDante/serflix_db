@@ -7,8 +7,8 @@ BEGIN
 	DECLARE series_json JSON;
 	DECLARE goals_json JSON;
 	DECLARE plan_json JSON;
-	DECLARE is_password BOOLEAN;
 	DECLARE error_code INT;
+	DECLARE password_data VARCHAR(100);
 	DECLARE message VARCHAR(255) DEFAULT 'Profile found';
 	-- this will be the final result
 	DECLARE result_json JSON;
@@ -68,15 +68,11 @@ BEGIN
 		)
 	);
 
-	SELECT 
-		IFNULL(
-			(
-				SELECT TRUE FROM profile_password
-				WHERE profile_id = in_profile_id
-			),
-			FALSE
-		) INTO is_password;
-	
+	SELECT password 
+	INTO password_data
+	FROM profile_password
+	WHERE profile_id = in_profile_id;
+
 	SELECT 
 		JSON_OBJECT(
 			'id', id,
@@ -86,7 +82,7 @@ BEGIN
 			'series', series_json,
 			'goals', goals_json,
 			'plan', plan_json,
-			'password', is_password
+			'password', password_data
 		)
 	INTO result_json
 	FROM profiles
