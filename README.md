@@ -38,7 +38,7 @@ One each of those variables is essential to function correctly because some bash
 
 ## Testing
 
-If you want to test your stored procedures, create a **.env.testing** on root of workspace with the these variables:
+If you want to test your stored procedures, create a **.env.testing** on root of workspace with these variables:
 - DB_TEST_HOST
 - DB_TEST_PORT
 - DB_TEST_USER
@@ -46,4 +46,3 @@ If you want to test your stored procedures, create a **.env.testing** on root of
 - DB_TEST_NAME
 - DB_TEST_FILE_STRUCTURE
 - DB_TRUNCATE
-

@@ -18,6 +18,10 @@ BEGIN
   INSERT INTO score_series(profile_id, serie_id, score, review)
   VALUES (in_profile_id, in_serie_id, in_score, in_review);
 
+  SELECT JSON_OBJECT(
+    'id', LAST_INSERT_ID()
+  ) INTO result_json;
+
   COMMIT;
 
   SELECT JSON_OBJECT(
