@@ -17,6 +17,10 @@ BEGIN
 
   INSERT INTO score_movies(profile_id, movie_id, score, review)
   VALUES (in_profile_id, in_movie_id, in_score, in_review);
+  
+  SELECT JSON_OBJECT(
+    'id', LAST_INSERT_ID() 
+  )INTO result_json;
 
   COMMIT;
   

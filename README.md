@@ -35,3 +35,15 @@ One each of those variables is essential to function correctly because some bash
 - DB_NAME
 - FILE_TO_APPLY_BACKUP
 - FILE_SQL_TO_APPLY
+
+## Testing
+
+If you want to test your stored procedures, create a **.env.testing** on root of workspace with the these variables:
+- DB_TEST_HOST
+- DB_TEST_PORT
+- DB_TEST_USER
+- DB_TEST_PASSWORD
+- DB_TEST_NAME
+- DB_TEST_FILE_STRUCTURE
+- DB_TRUNCATE
+

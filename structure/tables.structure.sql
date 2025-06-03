@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS profile_movies(
 	id INT NOT NULL AUTO_INCREMENT,
     profile_id INT NOT NULL,
     movie_id INT NOT NULL,
-    delete_at TIMESTAMP,
+    delete_at TIMESTAMP DEFAULT NULL,
     PRIMARY KEY(id),
 	FOREIGN KEY(profile_id) REFERENCES profiles(id) ON DELETE CASCADE,
     CONSTRAINT unique_value UNIQUE(profile_id, movie_id)

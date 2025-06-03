@@ -2,6 +2,6 @@
 ./db_updates./*
 ./db_backups./*
 
-.env
+.env*
 .vscode
 node_modules/*

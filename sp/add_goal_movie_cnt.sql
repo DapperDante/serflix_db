@@ -31,7 +31,7 @@ BEGIN
 			SET out_goal_id = 4;
 	END CASE;
 
-	-- TODO check if the goal already exists before insert a new goal
+	-- check if the goal already exists before insert a new goal
 
 	INSERT INTO profile_goals(profile_id, goal_id)
 	VALUES(in_profile_id, out_goal_id);

@@ -3,6 +3,10 @@ function expectObjectToHaveProperties(obj, properties) {
     expect(obj).toHaveProperty(prop);
   });
 }
+function expectBaseStructure(obj){
+  expectObjectToHaveProperties(obj, ["result", "error_code", "message"]);
+}
 module.exports = {
-  expectObjectToHaveProperties
+  expectObjectToHaveProperties,
+  expectBaseStructure
 }
