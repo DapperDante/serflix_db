@@ -1,4 +1,4 @@
-const { expectObjectToHaveProperties } = require("./utils/testHelpers");
+const { expectObjectToHaveProperties, expectBaseStructure } = require("./utils/testHelpers");
 
 describe("User tests", () => {
   let idUser;
@@ -15,6 +15,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.result.id).not.toBeNull();
         idUser = response.result.id;
         done();
@@ -29,6 +30,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.error_code).not.toBeNull();
         done();
       }
@@ -43,6 +45,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.error_code).not.toBeNull();
         done();
       }
@@ -56,6 +59,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.error_code).toBeNull();
         done();
       }
@@ -69,6 +73,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.result).not.toBeNull();
         expectObjectToHaveProperties(response.result, 
           [
@@ -92,6 +97,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.result).not.toBeNull();
         expect(response.result.email).toBe(email);
         done();
@@ -106,6 +112,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.result.password).toBe(newPassword);
         done();
       }
@@ -119,6 +126,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.result.username).toBe(updatedUsername);
         done();
       }
@@ -132,6 +140,7 @@ describe("User tests", () => {
           throw error;
         }
         const response = JSON.parse(results[0][0].response);
+        expectBaseStructure(response);
         expect(response.result.is_first_time).toBeNull();
         done();
       }

@@ -1,4 +1,4 @@
-const { expectObjectToHaveProperties } = require("./utils/testHelpers");
+const { expectObjectToHaveProperties, expectBaseStructure } = require("./utils/testHelpers");
 
 describe("Profile tests", () => {
 	let idUser;
@@ -15,6 +15,7 @@ describe("Profile tests", () => {
 					throw error;
 				}
 				const response = JSON.parse(results[0][0].response);
+				expectBaseStructure(response);
 				expect(response.result.id).not.toBeNull();
 				idUser = response.result.id;
 				done();
@@ -27,6 +28,7 @@ describe("Profile tests", () => {
 				throw error;
 			}
 			const response = JSON.parse(results[0][0].response);
+			expectBaseStructure(response);
 			expect(response.result.id).not.toBeNull();
 			idProfile = response.result.id;
 			done();
@@ -38,6 +40,7 @@ describe("Profile tests", () => {
 				throw error;
 			}
 			const response = JSON.parse(results[0][0].response);
+			expectBaseStructure(response);
 			expectObjectToHaveProperties(response.result, [
 				"id",
 				"name",
@@ -57,6 +60,7 @@ describe("Profile tests", () => {
 				throw error;
 			}
 			const response = JSON.parse(results[0][0].response);
+			expectBaseStructure(response);
 			expect(Array.isArray(response.result)).toBe(true);
 			expectObjectToHaveProperties(response.result[0], [
 				"id",
@@ -72,6 +76,7 @@ describe("Profile tests", () => {
 		global.db.query(`CALL get_profile(${idProfile});`, (error, results) => {
 			if (error) throw error;
 			const response = JSON.parse(results[0][0].response);
+			expectBaseStructure(response);
 			expect(response.result.password).not.toBeNull();
 			done();
 		});
@@ -81,6 +86,7 @@ describe("Profile tests", () => {
 		global.db.query(`CALL get_profile(${idProfile});`, (error, results) => {
 			if (error) throw error;
 			const response = JSON.parse(results[0][0].response);
+			expectBaseStructure(response);
 			expect(response.result.password).toBe(newPassword);
 			done();
 		});
@@ -90,6 +96,7 @@ describe("Profile tests", () => {
 		global.db.query(`CALL get_profile(${idProfile});`, (error, results) => {
 			if (error) throw error;
 			const response = JSON.parse(results[0][0].response);
+			expectBaseStructure(response);
 			expect(response.result.password).toBeNull();
 			done();
 		});
