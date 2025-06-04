@@ -1,0 +1,64 @@
+name: Run Jest Tests with MySQL
+
+on:
+  push:
+    branches: 
+      - test
+  pull_request:
+    branches: 
+      test
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+  
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3800 # Optional, default value is 3306. The port of host
+          container port: 3307 # Optional, default value is 3306. The port of container
+          character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+          collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+          mysql version: '5.7' # Optional, default value is "latest". The version of the MySQL
+          mysql database: 'testing' # Optional, default value is "test". The specified database which will be create
+          mysql root password: 'passwordRoot' # Required if "mysql user" is empty, default is empty. The root superuser password
+          # mysql user: 'testing' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+          # mysql password: 'passwordUser' # Required if "mysql user" exists. The password for the "mysql user"
+      
+      - name: Create a .env.testing
+        run: |
+          cat <<EOF > .env.testing
+          DB_TEST_HOST=127.0.0.1
+          DB_TEST_PORT=3800
+          DB_TEST_NAME=serflix_test
+          DB_TEST_USER=root
+          DB_TEST_PASSWORD=passwordRoot
+          EOF
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install mysql client
+        run: sudo apt-get update && sudo apt-get install -y mysql-client
+
+      - name: Wait for MySQL to be ready
+        run: |
+          for i in {1..30}; do
+            if mysqladmin ping -h127.0.0.1 -P3800 -ppasswordRoot --silent; then
+              break
+            fi
+            sleep 2
+          done
+
+      # - name: Change authentication method for MySQL user
+      #   run: mysql -h127.0.0.1 -P3800 -uroot -ppasswordRoot -e "ALTER USER 'testing'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY 'passwordUser'; FLUSH PRIVILEGES;"
+      
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Jest tests
+        run: npm test
